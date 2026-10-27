@@ -1,25 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Programacion3.Models;
+using Programacion3.Services;
 
 namespace Programacion3.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class ProductosController: ControllerBase
+    public class ProductosController : ControllerBase
     {
-        private static readonly Producto[] Productos = new[]
+        private readonly IProductoService _productoService;            
+
+        public ProductosController(IProductoService productoService)   
         {
-    new Producto { Id = 1, Nombre= "Lapiz", Precio = 100.00M, Stock =4},
-    new Producto { Id = 2, Nombre= "Goma", Precio = 50.00M, Stock =6},
-    new Producto { Id = 3, Nombre= "Regla", Precio = 500.00M, Stock =7},
-    new Producto { Id = 4, Nombre= "Marcador", Precio = 200.00M, Stock =8},
+            _productoService = productoService;                        
+        }
 
-        };
-
-        [HttpGet(Name = "ListaDeProductos")]
+        [HttpGet]
         public IActionResult ObtenerTodos()
         {
-            return Ok(Productos);
+            var productos = _productoService.ObtenerTodos();
+            return Ok(productos);
         }
     }
 }
